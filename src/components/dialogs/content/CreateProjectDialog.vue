@@ -1,90 +1,117 @@
+<template>
+  <v-card class="create-project">
+    <Title content="项目设置"/>
+    <div class="create-project__container">
+      <div step="1" class="create-project__stepper">
+        <div class="create-project__stepper__content">
+          <div>
+            <!-- title -->
+            <v-text-field
+              class="create-project__title"
+              :color="appColor"
+              :label="$lang.Get('title')"
+              outlined
+              dense
+              v-model="input.title"
+              :rules="value => !!value || 'Required.'"
+            />
+            <!-- editor -->
+            <div> 
+              <v-card class="elevation-2" style="border-radius: 0" light>
+                <div id="toolbar">
+                  <div id="editor" style="height: 180px">
+                  </div>
+                </div>
+              </v-card>
+            </div>
+            <!-- category input -->
+            <v-text-field
+              class="create-project__category"
+              :color="appColor"
+              label="Categories"
+              placeholder="Input a new category and enter"
+              append-icon="mdi-backburger"
+              outlined
+              dense
+              v-model="input.category"
+              @keyup="e => e.keyCode === 13 && addCategory()"
+            />
+
+
+            <!-- chips -->
+            <div> 
+              <v-chip 
+                small 
+                v-for="(cat, i) in input.categories"
+                :key="i"
+              >{{cat}}</v-chip>
+            </div>
+            <!-- folder selector -->
+            <!-- <div class="create-project__folder-input ">
+              <v-btn
+                :color="appColor"
+                @click="selectFolder"
+                class="create-project__folder-input__button"
+              >选择文件夹</v-btn>
+              <div>
+            </div> -->
+            <!-- action button -->
+            <div style="width: 100%; display: flex; flex-direction: row-reverse;">
+              <v-btn text :disabled="isDisabled" :color="appColor" @click="createProject">
+                创建项目
+              </v-btn>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </v-card>
+</template>
+
 <script lang="ts">
-import Vue, { VNode } from "vue";
+import { Vue, Component, Prop } from "vue-property-decorator";
 import Quill from "quill";
-import Component from "vue-class-component";
 import { Category, Project } from "../../../core/Data";
-import Title from "../utils/Title.vue";
+import Title from "@/components/dialogs/utils/Title.vue";
 import { CreateElement } from "vue/types/umd";
+import { Getter } from "vuex-class";
 
 // User input for the Dialog.
 class Input {
-  public title: string = "";
-  public description: string = "";
-  public category: string = "";
-  public categories: string[] = ["TODO", "In Progress", "Done"];
-  public selectedFolder: string = "";
+  public title = "";
+  public description = "";
+  public category = "";
+  public categories = ["TODO", "In Progress", "Done"];
+  public selectedFolder = "";
+
+  public flush() {
+    this.categories.push(this.category)
+    this.category = ""
+  }
+
+  public get isDisabled() {
+    return this.title.length === 0  ||
+      this.categories.length === 0 ||
+      this.selectedFolder.length === 0
+  }
 }
 
 @Component({
   components: {
-    Title
-  }
+    Title,
+  },
 })
-export default class extends Vue {
+export default class CreateProjectDialog extends Vue {
   private editor: any = null;
   private input: Input = new Input();
   private readonly stepperId: string = "i";
-
-  private get color() {
-    return this.$store.getters.appColor;
+  @Getter('appColor') appColor!: string;
+  
+  addCategory() {
+    this.input.flush()
   }
 
-  /**
-   * Add the new categories to the list, and clean up the category input.
-   */
-  private addCategory() {
-    this.input.categories.push(this.input.category);
-    this.input.category = "";
-  }
-
-  /**
-   * @return Whether the button to create a new project is disabled.
-   */
-  private get isDisabled() {
-    return (
-      this.input.title.length === 0 ||
-      this.input.categories.length === 0 ||
-      this.input.selectedFolder.length === 0
-    );
-  }
-
-  /**
-   * Open OS's dialog to chose a folder.
-   */
-  private selectFolder() {
-    // const electron = require("electron");
-    // this.input.selectedFolder = electron.remote.dialog.showOpenDialogSync(
-    //   electron.remote.getCurrentWindow(),
-    //   {
-    //     title: "Project destination",
-    //     defaultPath: os.homedir(),
-    //     properties: ["openDirectory"]
-    //   }
-    // )![0];
-  }
-
-  private createProject() {
-    // Create category objects from strings.
-    const categories: Category[] = [];
-    this.input.categories.forEach(category => {
-      let categ = category.replace(/ /g, "_");
-      categ = categ.toLowerCase();
-      categories.push(new Category(categ, category, false));
-    });
-
-    this.$store.dispatch(
-      "CreateProject",
-      new Project(
-        this.input.title,
-        document.getElementsByClassName("ql-editor")[0].innerHTML,
-        categories,
-        this.input.selectedFolder
-      )
-    );
-    this.$store.dispatch("CloseDialog");
-  }
-
-  private mounted() {
+  mounted() {
     if (document.querySelector("#editor")) {
       // Setup QUILL
       const options = {
@@ -106,154 +133,20 @@ export default class extends Vue {
       this.editor = new Quill("#editor", options);
     }
   }
-
-  private render(h: CreateElement) {
-    const categoriesLoop = (h: CreateElement) => {
-      const children: VNode[] = [];
-      this.input.categories.forEach(category => {
-        children.push(h("v-chip", { props: { small: true } }, category));
-      });
-      return children;
-    };
-
-    /**
-     * Input for the project's title
-     */
-    const title = () =>
-      h("v-text-field", {
-        props: {
-          color: this.color,
-          label: (<any>this).$lang.Get("title"),
-          outlined: true,
-          dense: true,
-          rules: [(value: string) => !!value || "Required."],
-          value: this.input.title
-        },
-        on: {
-          input: (event: any) => {
-            this.input.title = event;
-          }
-        },
-        class: "create-project__title "
-      });
-
-    /**
-     * Quill editor to write the description with
-     */
-    const editor = () =>
-      h("div", {}, [
-        h(
-          "v-card",
-          {
-            props: { light: true },
-            class: "elevation-2 ",
-            style: "border-radius:0;"
-          },
-          [
-            h("div", { props: { id: "toolbar" } }),
-            h("div", {
-              attrs: {
-                id: "editor"
-              },
-              style: "height:180px;"
-            })
-          ]
+  
+  createProject() {
+    const categories = this.input.categories.map(cat => 
+        new Category(cat.replace(/ /g, "_").toLowerCase(), cat, false)
         )
-      ]);
 
-    /**
-     * Input for the categories of the project to create
-     */
-    const categoryInput = () =>
-      h("v-text-field", {
-        props: {
-          color: this.color,
-          label: "Categories",
-          placeholder: "Input a new category and hit enter. E.g. TODO",
-          "append-icon": "mdi-backburger",
-          outlined: true,
-          dense: true,
-          value: this.input.category
-        },
-        on: {
-          input: (event: any) => {
-            this.input.category = event;
-          },
-          keyup: (event: any) => {
-            if (event.keyCode !== 13) {
-              return;
-            }
-            this.addCategory();
-          }
-        },
-        class: "create-project__category "
-      });
-
-    /**
-     * Vizualise the categories entered by the user
-     */
-    const categoryChips = () => h("div", [categoriesLoop(h)]);
-
-    /**
-     * Select folder where to store the project's file.
-     */
-    const selectFolder = () =>
-      h("div", { class: "create-project__folder-input " }, [
-        h(
-          "v-btn",
-          {
-            props: { color: this.color },
-            on: { click: this.selectFolder },
-            class: "create-project__folder-input__button "
-          },
-          "Browse Folder..."
-        ),
-        h(
-          "div",
-          { class: "create-project__folder-input__desc " },
-          this.input.selectedFolder ? this.input.selectedFolder : "No folder selected yet."
-        )
-      ]);
-
-    /**
-     * Buttons to cancel or create the project.
-     */
-    const actionButton = () =>
-      h(
-        "div",
-        {
-          style: "width: 100%; display: flex; flex-direction: row-reverse;"
-        },
-        [
-          h(
-            "v-btn",
-            {
-              props: {
-                text: true,
-                disabled: this.isDisabled,
-                color: this.color
-              },
-              on: { click: this.createProject }
-            },
-            "Create Project"
-          )
-        ]
-      );
-    return h("v-card", { class: "create-project " }, [
-      h("Title", { props: { content: "Project Information" } }),
-      h("div", { class: "create-project__container " }, [
-        h("div", { props: { step: "1" }, class: "create-project__stepper " }, [
-          h("div", { class: "create-project__stepper__content " }, [
-            h("div", {}, [title(), editor(), categoryInput(), categoryChips()]),
-            selectFolder(),
-            actionButton()
-          ])
-        ])
-      ])
-    ]);
+    this.$store.dispatch("CreateObject", 
+      new Project(this.input.title, document.getElementsByClassName('ql-editor')[0].innerHTML, categories, this.input.selectedFolder))
+    this.$store.dispatch("CloseDialog")
   }
+
 }
 </script>
+
 
 <style lang="scss" scoped>
 .create-project {

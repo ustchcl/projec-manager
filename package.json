@@ -42,6 +42,7 @@
     "sass": "^1.30.0",
     "sass-loader": "^10.1.0",
     "typescript": "~3.9.3",
+    "vue-eslint-parser": "^7.3.0",
     "vue-template-compiler": "^2.6.11",
     "vuetify-loader": "^1.6.0"
   }
