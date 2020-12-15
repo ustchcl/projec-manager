@@ -7,10 +7,14 @@
         :color="color"
         :class="color == selected ? 'elevation-5' : ''"
         :key="'color' + i"
-        v-text="color.length == 0 ? 'default' : ''"
         @click="select(color, i)"
         :flat="selected != i"
       ></v-card>
+      <v-card
+        class="app-color-picker__item"
+        style="width: 50px; height: 20px; text-align: center;"
+        color="rgb(0, 150, 136)"
+      >默认</v-card>
     </div>
     <v-divider></v-divider>
     <v-btn
@@ -19,7 +23,7 @@
       outlined
       @click="showCustomColor"
       :color="color"
-    >CUSTOM COLOR...</v-btn>
+    >自定义</v-btn>
     <v-checkbox label="White Text" v-model="whiteText"></v-checkbox>
 
     <template v-if="customColor.enabled">
@@ -49,7 +53,7 @@ export default class ColorPicker extends Vue {
     enabled: false
   };
 
-  private whiteText = true
+  private whiteText = this.$store.getters.appColor.indexOf(WHITE_TEXT) !== -1;
     // this.$store.getters.appColor.indexOf(WHITE_TEXT) !== -1;
 
   private colors: string[] = [
@@ -70,7 +74,6 @@ export default class ColorPicker extends Vue {
     "#ff5722",
     "#795548",
     "#607d8b",
-    ""
   ];
   private selected: number = this.colors.findIndex(
     color => this.value.indexOf(color) !== -1

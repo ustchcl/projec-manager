@@ -5,7 +5,7 @@
     class="elevation-20"
     :class="color"
     :height="height"
-    max-width="800px"
+    :max-width="600"
     persistent
   >
     <slot></slot>

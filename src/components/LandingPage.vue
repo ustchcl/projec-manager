@@ -1,6 +1,6 @@
 <template>
   <div id="container">
-    <content-dialog-vue />
+    <content-dialog-vue/>
     <div class="landing-page__dialogs">
       <component v-if="dialogEnabled" :is="currentDialog" />
     </div>
@@ -82,7 +82,9 @@ export default {
     }
   },
   methods: {
-    keyUp(event) {}
+    keyUp(event) {
+      console.log(event)
+    }
   },
   mounted() {
     AppManager.setupLandingPage(

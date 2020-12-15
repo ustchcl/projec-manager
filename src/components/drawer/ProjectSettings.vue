@@ -22,7 +22,9 @@ export default class ProjectSettings extends Vue {
     {
       title: (this as any).$lang.Get("newProject"),
       icon: mdiPlus,
-      "action": () => this.$store.dispatch("ToggleDialog", Dialogs.CreateProject)
+      action: () => {
+        this.$store.dispatch("ToggleDialog", Dialogs.CreateProject)
+      }
     },
     {
       title: (this as any).$lang.Get("exportProject"),

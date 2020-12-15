@@ -4,7 +4,7 @@ class Language {
   install(Vue: any, options: any) {
     Vue.prototype.$lang = {
       context: null,
-      lang: "en",
+      lang: "zh",
 
       Get(key: string) {
         //@ts-ignore

@@ -1,12 +1,21 @@
 <template>
   <v-card class="app-settings">
     <v-tabs v-model="active" centered>
-      <v-tab v-for="(tab, index) in tabs" :key="index" :href="`#tab-${index}`" :ripple="false">
+      <v-tab
+        v-for="(tab, index) in tabs"
+        :key="index"
+        :href="`#tab-${index}`"
+        :ripple="false"
+      >
         {{ tab }}
       </v-tab>
     </v-tabs>
     <v-tabs-items v-model="active">
-      <v-tab-item v-for="(tab, index) in tabs" :key="index" :value="`tab-${index}`">
+      <v-tab-item
+        v-for="(tab, index) in tabs"
+        :key="index"
+        :value="`tab-${index}`"
+      >
         <GeneralSettings v-if="tab == $lang.Get('general')" class="item" />
         <div v-if="tab == $lang.Get('about')" class="item">
           <v-card flat>
@@ -19,7 +28,7 @@
       </v-tab-item>
     </v-tabs-items>
     <div class="app-settings__actions">
-      <v-btn text :color="color" @click="close">Close</v-btn>
+      <v-btn text :color="appColor" @click="close">Close</v-btn>
     </div>
   </v-card>
 </template>
@@ -29,31 +38,32 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import GeneralSettings from "../../drawer/GeneralSettings.vue";
 import { CreateElement } from "vue/types/umd";
+import { Getter } from "vuex-class";
 
 GeneralSettings;
 
 @Component({
   components: {
-    GeneralSettings
+    GeneralSettings,
   }
 })
-export default class extends Vue {
-  private tabs: string[] = [(<any>this).$lang.Get("general"), (<any>this).$lang.Get("about")];
+export default class AppSettingDialog extends Vue {
+  @Getter("appColor") appColor!: string;
+  private tabs: string[] = [
+    (<any>this).$lang.Get("general"),
+    (<any>this).$lang.Get("about"),
+  ];
   private active: string = "tab-0";
 
-  private get color() {
-    return this.$store.getters.appColor;
-  }
-
   private close() {
-    this.$store.dispatch("CloseDialog");
+    this.$store.dispatch("CloseDialog")
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .app-settings {
-  height: 400px;
+  height: 500px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;

@@ -13,7 +13,7 @@
         :label="$lang.Get('darkenToolbar')"
         v-model="darkenToolbar"
       ></v-checkbox>
-      <ColorPicker v-model="color" @text-color-selected="setTextColor"></ColorPicker>
+      <color-picker v-model="color" @text-color-selected="setTextColor"></color-picker>
       <LanguageSelection class="px-2" />
     </v-container>
   </v-card>
@@ -25,7 +25,7 @@ import Component from "vue-class-component";
 import { Watch } from "vue-property-decorator";
 
 @Component({})
-export default class extends Vue {
+export default class GeneralSettings extends Vue {
   private color: string = this.$store.getters.appColor;
 
   set darkMode(value) {

@@ -1,6 +1,6 @@
 export const LangData = {
   en: {
-    projectName: "Topsi Project Manager",
+    projectName: "Project Manager",
     firstUseWelcome: "Welcome to Topsi Project Manager",
     firstUseContent: `<strong>Press CTRL+D at any time to display the help page.</strong> <br /> Since this is the first time you're using this application, please setup the next default values to be used by the application. <br/> <br/> All the settings can be
 		<strong>modified </strong> at any time.`,
@@ -48,8 +48,8 @@ export const LangData = {
     add: "Add"
   },
   zh: {
-    projectName: "Topsi 项目管理",
-    firstUseWelcome: "欢迎使用 Topsi 项目管理",
+    projectName: "ISPOT 项目管理",
+    firstUseWelcome: "欢迎使用 ISPOT 项目管理",
     firstUseContent: `<strong>任何时候按下 CTRL+D 可以显示帮助页面.</strong> <br /> 由于这是你第一次使用这个应用，请设置应用程序要使用的默认值 <br/> <br/> 所有设置在任何时候都可以<strong>修改 </strong>。`,
     firstUseSetupFolder: "设置默认的文件夹去保存你的项目。",
     firstUseSetupColor: "设置项目默认颜色",

@@ -1,9 +1,14 @@
 <template>
-<v-row justify="center">
-  <v-dialog :persistent="isPersistent" overlay-opacity="0.5" :value="isDialogOpened" @change="v => !v && hide" max-width="600px">
-    <component :is="dialogComponent" />
-  </v-dialog>
   <v-row justify="center">
+    <v-dialog
+      :persistent="isPersistent"
+      overlay-opacity="0.5"
+      v-model="visible"
+      :max-width="600"
+    >
+      <component :is="dialogComponent" />
+    </v-dialog>
+  </v-row>
 </template>
 
 <script lang="ts">
@@ -16,12 +21,17 @@ import { Getter } from "vuex-class";
 export default class ContentDialog extends Vue {
   @Getter("isDialogOpened") isDialogOpened!: boolean;
 
-  hide() {
+  get visible() {
+    console.log("-------- get")
+    return this.isDialogOpened
+  }
+
+  set visible(v: boolean) {
     this.$store.dispatch("CloseDialog");
   }
 
-  private get isPersistent() {
-    return false; // this.dialogComponent === Dialogs.EditNote;
+private get isPersistent() {
+    return this.dialogComponent === Dialogs.EditNote;
   }
 
   private get dialogComponent() {
