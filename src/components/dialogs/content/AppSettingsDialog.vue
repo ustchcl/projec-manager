@@ -40,8 +40,6 @@ import GeneralSettings from "../../drawer/GeneralSettings.vue";
 import { CreateElement } from "vue/types/umd";
 import { Getter } from "vuex-class";
 
-GeneralSettings;
-
 @Component({
   components: {
     GeneralSettings,
@@ -50,15 +48,16 @@ GeneralSettings;
 export default class AppSettingDialog extends Vue {
   @Getter("appColor") appColor!: string;
   private tabs: string[] = [
-    (<any>this).$lang.Get("general"),
-    (<any>this).$lang.Get("about"),
+    (this as any).$lang.Get("general"),
+    (this as any).$lang.Get("about"),
   ];
-  private active: string = "tab-0";
+  private active = "tab-0";
 
   private close() {
     this.$store.dispatch("CloseDialog")
   }
 }
+
 </script>
 
 <style lang="scss" scoped>

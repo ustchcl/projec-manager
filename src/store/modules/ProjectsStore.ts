@@ -1,6 +1,7 @@
 import DBManager from "@/core/DBManager";
 import EventManager from "@/core/EventManager";
 import { Project, Category } from "@/core/Data";
+import * as net from "@/core/DataLayer"
 
 type State = {
   projects: Project[];
@@ -27,9 +28,7 @@ const mutations = {
    * @param {*State} state ProjectStore state.
    */
   RetrieveProjects(state: State) {
-    state.projects = DBManager.getAppDB()
-      .getAll<Project>("projects")
-      .sort((a, b) => a.id - b.id);
+    state.projects = net.project.list().filter(x => x !== null) as Project[]
   },
 
   /**
@@ -54,28 +53,7 @@ const mutations = {
     project.customPath =
       data.customPath || DBManager.getAppDB().getValue("default_databases_folder");
 
-    // Create the database for the project.
-    project.id = DBManager.createDB(data.customPath);
-
-    const appDB = DBManager.getAppDB();
-    // Store the project in the database.
-    appDB.write("projects", project);
-
-    const projectDB = DBManager.getDB(project.id);
-    // Store the project info in its own database
-    projectDB.setValue("info", project);
-
-    // Create first milestone.
-    projectDB.write("milestones", {
-      id: 0,
-      title: "Default"
-    });
-
-    // Count the default milestone
-    projectDB.setValue("milestones_id", 1);
-
-    // Create empty notes array
-    projectDB.setValue("notes", []);
+    net.project.create(project);
   },
 
   UpdateProject(state: State, data: any) {
@@ -90,12 +68,7 @@ const mutations = {
       throw new Error(`Cannot update a project with invalid data ${Object.values(data)}`);
     }
 
-    // Move to the new path.
-    DBManager.move(data.id, data.customPath);
-
-    // Update the project
-    DBManager.getDB(data.id).setValue("info", data);
-    DBManager.getAppDB().update("projects", data.id, data);
+    net.project.update(data.id, data)
   },
 
   /**
@@ -110,9 +83,7 @@ const mutations = {
       throw new Error("Project ID required to delete a project.");
     }
 
-    DBManager.getAppDB().remove("projects", {
-      id: project.id
-    });
+    net.project.remove(project.id)
   },
 
   ToggleFoldCategory(state: State, data: any) {
@@ -159,9 +130,7 @@ const mutations = {
    * Update the content of the projets.
    */
   UpdateProjects(state: State) {
-    state.projects = DBManager.getAppDB()
-      .getAll<Project>("projects")
-      .sort((a, b) => a.id - b.id);
+    state.projects = net.project.list().filter(x => x !== null) as Project[]
   }
 };
 

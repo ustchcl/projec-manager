@@ -6,16 +6,16 @@ export class Project {
     public readonly title: string,
     public readonly description: string,
     public readonly categories: Category[],
-    public customPath: string = ""
-  ) {}
+    public customPath: string = "",
+  ) { }
 }
 
 export class Category {
-  constructor(public tag: string, public title: string, public folded: boolean) {}
+  constructor(public tag: string, public title: string, public folded: boolean) { }
 }
 
 export class Task {
-  constructor(public readonly id: string, public content: string, public done: boolean) {}
+  constructor(public readonly id: string, public content: string, public done: boolean) { }
 }
 
 export class Note {
@@ -32,9 +32,14 @@ export class Note {
     public readonly textColor: string,
     public readonly milestoneId: number,
     public readonly tags: string[] = []
-  ) {}
+  ) { }
 }
 
 export class Milestone {
-  constructor(public readonly id: number, public readonly title: string) {}
+  constructor(
+    public readonly id: number, 
+    public readonly title: string, 
+    public deadline: number,
+    public description: string
+  ) { }
 }

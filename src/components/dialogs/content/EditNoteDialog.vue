@@ -25,7 +25,7 @@ import Title from "@/components/dialogs/utils/Title.vue";
 import { Note } from "@/core/Data";
 
 class Input {
-  public title: string = "";
+  public title = "";
 }
 
 @Component({

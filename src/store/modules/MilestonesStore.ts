@@ -35,7 +35,7 @@ const mutations = {
 
     const projectDB = DBManager.getDB(data.projectId);
     // Create the new milestone object
-    const milestone = new Milestone(projectDB.getId("milestones_id"), data.name);
+    const milestone = new Milestone(projectDB.getId("milestones_id"), data.name, 0, "");
 
     // Store the new milestone object in the database.
     projectDB.write("milestones", milestone);

@@ -21,13 +21,13 @@ export default class extends Vue {
   private select(language: string) {
     if (language == this.$store.getters.selectedLanguage) return;
     this.$store.dispatch("SetCurrentLanguage", language);
-    (<any>this).$lang.SetCurrentLang(language);
+    (this as any).$lang.SetCurrentLang(language);
     location.reload();
   }
 
   private created() {
     // this.$lang.SetCurrentLang('en')
-    this.langs = (<any>this).$lang.GetLanguages();
+    this.langs = (this as any).$lang.GetLanguages();
     this.selected = this.$store.getters.selectedLanguage;
   }
 }
