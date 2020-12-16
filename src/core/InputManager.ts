@@ -10,7 +10,7 @@ class InputManager {
       } else if (event.code === "KeyD") {
         if (event.ctrlKey) context.$store.commit("ToggleShowHelper");
       } else if (event.code === "KeyL") {
-        if (event.ctrlKey) context.$store.dispatch("ToggleDialog", "milestonesList");
+        if (event.ctrlKey) context.$store.dispatch("ToggleDialog", "MilestonesList");
       } else if (event.code === "KeyN") {
         if (event.ctrlKey) context.$store.commit("CreateNoteDialog");
       }

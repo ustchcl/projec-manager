@@ -1,13 +1,13 @@
 <template>
   <div>
     <Tooltip content="Current milestone settings" top>
-      <v-list-item id="milestone-button" @click="">
+      <v-list-item id="milestone-button" @click="() => {}">
         <v-list-item-action>
-          <v-icon style="margin-left:-2px">timeline</v-icon>
+          <v-icon style="margin-left:-2px">{{mdiTimeline}}</v-icon>
         </v-list-item-action>
       </v-list-item>
     </Tooltip>
-    <FloatingDiv activator-id="milestone-button" @action="" width="500" dark left height="500">
+    <FloatingDiv activator-id="milestone-button" @action="() => {}" width="500" dark left height="500">
       <div id="milestone-container">
         <div id="milestone-list">
           <v-layout row class="pt-2">
@@ -61,7 +61,7 @@
               TODO
             </v-tab>
             <v-tab>
-              {{ this.lang.Get("done") }}
+              {{ $lang.Get("done") }}
             </v-tab>
 
             <v-tabs-items>
@@ -69,11 +69,11 @@
                 <v-container>
                   <v-list>
                     <v-list-item
-                      v-for="(item, index) in notes.todo"
+                      v-for="item in notes.todo"
                       :key="item.id"
                       avatar
                       ripple
-                      @click=""
+                      @click="() => {}"
                     >
                       <v-list-item-content>
                         <v-list-item-title>{{ item.title }}</v-list-item-title>
@@ -89,11 +89,11 @@
                 <v-container>
                   <v-list>
                     <v-list-item
-                      v-for="(item, index) in notes.done"
+                      v-for="item in notes.done"
                       :key="item.id"
                       avatar
                       ripple
-                      @click=""
+                      @click="() => {}"
                     >
                       <v-list-item-content>
                         <v-list-item-title>{{ item.title }}</v-list-item-title>
@@ -113,10 +113,12 @@
   </div>
 </template>
 <script>
+import { mdiTimeline } from "@mdi/js";
 export default {
   name: "MilestonesSettings",
   data() {
     return {
+      mdiTimeline: mdiTimeline,
       title: "Milestone",
       finishingCategory: "",
       selected: [2],
@@ -136,7 +138,9 @@ export default {
     }
   },
   watch: {
-    title(value) {},
+    title(value) {
+      console.log(value);
+    },
 
     milestoneId(value) {
       this.update();

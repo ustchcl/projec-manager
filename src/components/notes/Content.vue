@@ -3,7 +3,7 @@
     <div class="top pa-3 title">
       <div class="content-category-title">
         <v-toolbar height="30" color="transparent" flat>
-          <div v-show="!editedTitle" @dblclick="editTitle">
+          <div v-show="!editTitle" @dblclick="doEditTitle">
             {{ title }}
           </div>
           <div v-show="editedTitle" ref="edit" class="pt-3 mt-1" style="width:100px">
@@ -45,7 +45,7 @@ export default {
   },
   data() {
     return {
-      editedTitle: false,
+      editTitle: false,
       editedTitle: ""
     };
   },
@@ -87,7 +87,7 @@ export default {
       });
     },
 
-    editTitle() {
+    doEditTitle() {
       this.editTitle = true;
       this.editedTitle = this.title;
       Utils.ClickOutsideOrKeyPress(

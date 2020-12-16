@@ -6,7 +6,7 @@ import { DBFile } from "./DBFile";
 // Class containing all kind of helper functions to access
 // write and alter the local database.
 export class DBUtils {
-  private dataPath: string = "";
+  private dataPath = "";
   private context!: DBFile;
   private dbFilePath: string;
   private content: any;
@@ -106,7 +106,7 @@ export class DBUtils {
     }
     const saved: any[] = [];
     values.forEach((value: any) => {
-      for (let key in condition) {
+      for (const key in condition) {
         if (value[key] != null) {
           if (value[key] != condition[key]) {
             saved.push(value);
@@ -157,7 +157,7 @@ export class DBUtils {
     values
       .filter((value: any) => value.id === id)
       .forEach((value: any) => {
-        for (let key in data) {
+        for (const key in data) {
           value[key] = data[key];
         }
       });

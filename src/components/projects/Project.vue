@@ -1,5 +1,9 @@
 <template>
-  <v-card class="ma-2 pa-3 project_card elevation-3" height="90%" @click.native="openProject">
+  <v-card
+    class="ma-2 pa-3 project_card elevation-3"
+    height="90%"
+    @click.native="openProject"
+  >
     <v-card-title>
       {{ project.title }}
     </v-card-title>
@@ -10,21 +14,19 @@
     <v-card-text v-html="project.description"></v-card-text>
   </v-card>
 </template>
-<script>
-export default {
-  name: "Project",
-  props: {
-    project: Object
-  },
-  methods: {
-    /**
-     * Set the current project Id as the opened project.
-     */
-    openProject() {
-      this.$store.dispatch("OpenProject", this.project);
-    }
+<script lang="ts">
+import { Vue, Component, Prop } from "vue-property-decorator";
+
+@Component
+export default class Project extends Vue {
+  @Prop({ type: Object }) project!: any;
+  /**
+   * Set the current project Id as the opened project.
+   */
+  openProject() {
+    this.$store.dispatch("OpenProject", this.project);
   }
-};
+}
 </script>
 
 <style scoped>

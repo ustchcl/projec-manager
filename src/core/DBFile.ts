@@ -1,7 +1,7 @@
 // import fs from "fs";
 
 export class DBFile {
-  private key: string = "dbfile"
+  private key = "dbfile"
   constructor(public readonly path: string) {
     this.key = path
     // if (!fs.existsSync(path)) {

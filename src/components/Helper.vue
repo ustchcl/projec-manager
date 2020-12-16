@@ -1,12 +1,42 @@
-<script lang="ts">
-import Vue, { CreateElement, VNode } from "vue";
-import Component from "vue-class-component";
+<template>
+  <div class="text-xs-center">
+    <v-dialog
+      v-model="dialog"
+      :width="600"
+      persistent
+    >
+      <v-card>
+        <v-card-title dark primary-title class="headline justify-center">
+          {{$lang.Get("helperTitle")}}
+        </v-card-title>
+        <v-card-text class="text-xs-left">
+          <div>
+            <div
+              v-for="(item, i) in shortcuts"
+              :key="i"
+              class="helper__item"
+            >
+              <strong>{{item.key}}</strong>
+              <div>{{item.description}}</div>
+            </div>
+          </div>
+        </v-card-text>
 
-@Component({
-  name: "Helper"
-})
-export default class extends Vue {
-  private dialog: boolean = true;
+        <v-card-actions>
+          <v-spacer/>
+          <v-btn @click="close" color="primary" text>{{$lang.Get("close")}}</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </div>
+</template>
+
+<script lang="ts">
+import {Vue, Component, Prop} from "vue-property-decorator";
+
+@Component
+export default class Helper extends Vue {
+  private dialog = true;
   private shortcuts = [
     {
       key: "CTRL+D",
@@ -24,61 +54,10 @@ export default class extends Vue {
       key: "CTRL+N",
       description: "Create a new Note."
     }
-  ];
-  close() {
-    this.$store.commit("ToggleShowHelper");
-  }
-  render(h: CreateElement) {
-    const shortcutsLoop = (h: CreateElement) => {
-      const children: VNode[] = [];
-      this.shortcuts.forEach(shortcut => {
-        children.push(
-          h("div", { class: "helper__item" }, [
-            h("strong", shortcut.key),
-            h("div", shortcut.description)
-          ])
-        );
-      });
-      return [h("div", children)];
-    };
+  ]
 
-    return h("div", { class: "text-xs-center " }, [
-      h(
-        "v-dialog",
-        {
-          props: { value: this.dialog, width: "600", persistent: true },
-          on: {
-            input: (event: any) => {
-              this.dialog = event.target.value;
-            }
-          }
-        },
-        [
-          h("v-card", {}, [
-            h(
-              "v-card-title",
-              {
-                props: { dark: true, "primary-title": true },
-                class: "headline justify-center "
-              },
-              (<any>this).$lang.Get("helperTitle")
-            ),
-            h("v-card-text", { class: "text-xs-left " }, [h("div", shortcutsLoop(h))]),
-            h("v-card-actions", {}, [
-              h("v-spacer", {}),
-              h(
-                "v-btn",
-                {
-                  props: { color: "primary", text: true },
-                  on: { click: this.close }
-                },
-                (<any>this).$lang.Get("close")
-              )
-            ])
-          ])
-        ]
-      )
-    ]);
+  close() {
+    this.$store.commit("ToggleShowHelper")
   }
 }
 </script>

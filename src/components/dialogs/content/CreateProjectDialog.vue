@@ -13,7 +13,7 @@
               outlined
               dense
               v-model="input.title"
-              :rules="value => !!value || 'Required.'"
+              :rules="[value => !!value || 'Required.']"
             />
             <!-- editor -->
             <div> 
@@ -81,7 +81,7 @@ class Input {
   public title = "";
   public description = "";
   public category = "";
-  public categories = ["TODO", "In Progress", "Done"];
+  public categories = ["需求讨论", "可以开发", "正在开发", "开发完成", "测试通过"];
   public selectedFolder = "";
 
   public flush() {
@@ -89,11 +89,7 @@ class Input {
     this.category = ""
   }
 
-  public get isDisabled() {
-    return this.title.length === 0  ||
-      this.categories.length === 0 ||
-      this.selectedFolder.length === 0
-  }
+  
 }
 
 @Component({
@@ -106,6 +102,12 @@ export default class CreateProjectDialog extends Vue {
   private input: Input = new Input();
   private readonly stepperId: string = "i";
   @Getter('appColor') appColor!: string;
+
+  public get isDisabled() {
+    return this.input.title.length === 0  ||
+      this.input.categories.length === 0
+      // this.selectedFolder.length === 0
+  }
   
   addCategory() {
     this.input.flush()
@@ -139,7 +141,7 @@ export default class CreateProjectDialog extends Vue {
         new Category(cat.replace(/ /g, "_").toLowerCase(), cat, false)
         )
 
-    this.$store.dispatch("CreateObject", 
+    this.$store.dispatch("CreateProject", 
       new Project(this.input.title, document.getElementsByClassName('ql-editor')[0].innerHTML, categories, this.input.selectedFolder))
     this.$store.dispatch("CloseDialog")
   }

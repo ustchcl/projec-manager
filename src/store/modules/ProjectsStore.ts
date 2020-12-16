@@ -50,7 +50,7 @@ const mutations = {
     }
 
     // Create the new project to store.
-    let project = new Project(data.title, data.description, data.categories);
+    const project = new Project(data.title, data.description, data.categories);
     project.customPath =
       data.customPath || DBManager.getAppDB().getValue("default_databases_folder");
 

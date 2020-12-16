@@ -9,7 +9,8 @@ module.exports = {
     '@vue/typescript/recommended'
   ],
   parserOptions: {
-    ecmaVersion: 2020
+    ecmaVersion: 2020,
+    "parser": "@typescript-eslint/parser",
   },
   parser: "vue-eslint-parser",
   rules: {

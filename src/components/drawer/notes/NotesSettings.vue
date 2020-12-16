@@ -12,7 +12,7 @@
         </v-icon>
       </v-list-item>
       <!-- Note yet ready	 -->
-      <!-- <MilestonesSettings /> -->
+      <MilestonesSettings />
       <TagsSettings />
       <v-divider></v-divider>
     </v-list>
@@ -60,7 +60,7 @@ export default {
           title: "Search",
           hint: this.$lang.Get("searchInNotes"),
           action: () => {
-            this.$store.dispatch("ToggleDialog", "searchDialog");
+            this.$store.dispatch("ToggleDialog", "SearchDialog");
           }
         },
         {
@@ -75,14 +75,14 @@ export default {
           title: "Edit Project",
           class: "pr-2",
           hint: this.$lang.Get("editProject"),
-          action: () => this.$store.dispatch("ToggleDialog", "updateProject")
+          action: () => this.$store.dispatch("ToggleDialog", Dialogs.EditProject)
         },
         {
           icon: mdiFormatListNumberedRtl,
           title: "Milestones",
           style: "margin-left:-2px;",
           hint: this.$lang.Get("milestones"),
-          action: () => this.$store.dispatch("ToggleDialog", "milestonesList")
+          action: () => this.$store.dispatch("ToggleDialog", "MilestonesList")
         }
       ]
     };

@@ -4,7 +4,9 @@ export const Dialogs = {
   CreateNote: "create-note-dialog",
   AppSettings: "app-settings-dialog",
   VisualizeNote: "visualize-note-dialog",
-  EditNote: "edit-note-dialog"
+  EditNote: "edit-note-dialog",
+  Search: "search-dialog",
+  EditProject: "edit-project-dialog"
 };
 
 export const WHITE_TEXT = "#FFF";

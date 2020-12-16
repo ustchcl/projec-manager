@@ -1,6 +1,6 @@
 export class Project {
-  public id: number = -1;
-  public selectedMilestoneId: number = 0;
+  public id = -1;
+  public selectedMilestoneId = 0;
 
   constructor(
     public readonly title: string,
@@ -19,8 +19,8 @@ export class Task {
 }
 
 export class Note {
-  public id: number = -1;
-  public order: number = 0;
+  public id = -1;
+  public order = 0;
   public tasks: Task[] = [];
 
   constructor(

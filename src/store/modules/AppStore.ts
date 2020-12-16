@@ -168,7 +168,7 @@ const mutations = {
       throw new Error("A project must be opened to add a tag");
     }
     const db = DBManager.getDB(state.openedProjectId);
-    let tags = db.getValue("tags", []);
+    const tags = db.getValue("tags", []);
     let index = -1;
     for (let i = 0; i < tags.length; i++)
       if (tags[i].tag == tag.tag) {
@@ -191,7 +191,7 @@ const mutations = {
   },
 
   ToggleMilestonesList(state: State, value: boolean) {
-    mutations.OpenDialog(state, "milestonesList");
+    mutations.OpenDialog(state, "MilestonesList");
   },
 
   ToggleShowHelper(state: State, value: boolean) {

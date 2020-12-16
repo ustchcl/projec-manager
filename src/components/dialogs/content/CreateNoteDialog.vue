@@ -19,15 +19,15 @@ type InputMilestone = {
 };
 
 class Input {
-  title: string = "";
-  tagSearch: string = "";
+  title = "";
+  tagSearch = "";
   selectedTags: string[] = [];
   selectedMilestone!: InputMilestone;
   milestones: InputMilestone[] = [];
   categories: InputCategory[] = [];
   selectedCategory!: InputCategory;
-  noteColor: string = "";
-  noteTextColor: string = "";
+  noteColor = "";
+  noteTextColor = "";
 }
 
 @Component({
@@ -38,7 +38,7 @@ class Input {
     Title
   }
 })
-export default class extends Vue {
+export default class CreateNoteDialog extends Vue {
   // Reference to the quill editor
   private editor: any = null;
 
@@ -165,7 +165,7 @@ export default class extends Vue {
           outlined: true,
           dense: true,
           autofocus: true,
-          label: (<any>this).$lang.Get("title"),
+          label: (this as any).$lang.Get("title"),
           rules: [this.inputRequired()]
         },
         on: {
@@ -214,7 +214,7 @@ export default class extends Vue {
         hideDetails: true,
         value: this.input.tagSearch,
         chips: true,
-        label: (<any>this).$lang.Get("tags"),
+        label: (this as any).$lang.Get("tags"),
         solo: true,
         color: "primary",
         multiple: true,
