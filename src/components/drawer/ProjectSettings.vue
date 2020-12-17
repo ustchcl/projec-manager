@@ -37,7 +37,7 @@ export default class ProjectSettings extends Vue {
       title: (this as any).$lang.Get("importProject"),
       icon: mdiDatabaseImport,
       action: () => {
-        ProjectManager.loadProject();
+        this.$store.dispatch("ToggleDialog", Dialogs.ImportProject);
       },
     },
     {

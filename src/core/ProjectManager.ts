@@ -2,6 +2,8 @@ import Vue from "vue";
 import DBManager from "./DBManager";
 
 import store from "@/store";
+import Utils from "./Utils";
+import { Project } from "./Data";
 
 
 const vue = new Vue({
@@ -9,7 +11,8 @@ const vue = new Vue({
 });
 
 class ProjectManager {
-  saveProject(project: any) {
+  saveProject(project: Project) {
+    Utils.SaveToLocal(JSON.stringify(project), `${project.title}.json`)
     // const electron = require("electron");
     // const { dialog } = electron.remote;
 

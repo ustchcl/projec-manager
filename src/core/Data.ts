@@ -5,7 +5,7 @@ export class Project {
   constructor(
     public readonly title: string,
     public readonly description: string,
-    public readonly categories: Category[],
+    public categories: Category[],
     public customPath: string = "",
   ) { }
 }
@@ -42,4 +42,13 @@ export class Milestone {
     public deadline: number,
     public description: string
   ) { }
+}
+
+
+export class User {
+  constructor(
+    public id: number,
+    public username: string,
+    public icon: string
+  ) {}
 }

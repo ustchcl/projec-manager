@@ -49,7 +49,7 @@ export default class extends Vue {
     };
 
     return h("v-card", { class: "export-project " }, [
-      h("div", { class: "export-project__title font-weight-light " }, "Export Projects"),
+      h("div", { class: "export-project__title font-weight-light " }, "导出项目"),
       h("div", { class: "export-project__container " }, [
         h(
           "v-radio-group",
@@ -72,7 +72,7 @@ export default class extends Vue {
             props: { text: true, right: true, color: this.color },
             on: { click: this.exportProject }
           },
-          "Export"
+          "导出"
         )
       ])
     ]);

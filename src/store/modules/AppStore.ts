@@ -1,5 +1,5 @@
-import DBManager from "@/core/DBManager";
 import { Milestone } from "@/core/Data";
+import * as net from "@/core/DataLayer"
 
 type Dialog = {
   opened: boolean;
@@ -47,7 +47,7 @@ type State = {
   projectName: string;
 
   // The currently selected language.
-  selectedLanguage: string;
+  selectedLanguage: "en" | "zh";
 };
 
 const state: State = {
@@ -58,16 +58,16 @@ const state: State = {
   openedProjectId: -1,
   currentMilestoneId: 0,
   drawerWidth: 200,
-  darkMode: DBManager.getAppDB().getValue("dark_mode", false),
-  baseColor: DBManager.getAppDB().getValue("application_color", "#9c27b0"),
-  textColor: DBManager.getAppDB().getValue("application_text_color", "#fff"),
-  darkenToolbar: DBManager.getAppDB().getValue("darken_toolbar", false),
-  gitUserInfo: DBManager.getAppDB().getValue("git_user_info", {}),
-  firstTimeUse: DBManager.getAppDB().getValue("first_time_use", true),
+  darkMode: net.peferences.getConfig().darkMode,
+  baseColor: net.peferences.getConfig().baseColor,
+  textColor: net.peferences.getConfig().textColor, 
+  darkenToolbar: net.peferences.getConfig().darkenToolbar,
+  gitUserInfo: net.peferences.getConfig().user,
   searchContent: "",
   showHelper: false,
+  firstTimeUse: false,
   projectName: "",
-  selectedLanguage: DBManager.getAppDB().getValue("lang", "en")
+  selectedLanguage: net.peferences.getConfig().lang as any
 };
 
 const mutations = {
@@ -91,10 +91,10 @@ const mutations = {
     state.openedProjectId = id;
     // Set the default milestone when opening a project.
     if (id >= 0) {
-      const info = DBManager.getDB(id).getValue("info");
-      state.projectName = info.title;
+      const info = net.project.getById(id); // DBManager.getDB(id).getValue("info");
+      state.projectName = info?.title ?? "";
 
-      state.currentMilestoneId = info.selectedMilestoneId;
+      // state.currentMilestoneId = info.selectedMilestoneId;
     } else {
       state.projectName = "";
     }
@@ -105,7 +105,7 @@ const mutations = {
 
   SetDarkMode(state: State, value: boolean) {
     state.darkMode = value;
-    DBManager.getAppDB().setValue("dark_mode", value);
+    net.peferences.setValue("darkMode", value);
   },
 
   ShowSettings(state: State, value: boolean) {
@@ -118,17 +118,17 @@ const mutations = {
 
   SetAppColor(state: State, color: string) {
     state.baseColor = color;
-    DBManager.getAppDB().setValue("application_color", color);
+    net.peferences.setValue("baseColor", color)
   },
 
   SetTextColor(state: State, color: string) {
     state.textColor = color;
-    DBManager.getAppDB().setValue("application_text_color", color);
+    net.peferences.setValue("textColor", color)
   },
 
   ToggleDarkenToolbar(state: State) {
     state.darkenToolbar = !state.darkenToolbar;
-    DBManager.getAppDB().setValue("darken_toolbar", state.darkenToolbar);
+    net.peferences.setValue("darkenToolbar", !net.peferences.getConfig().darkenToolbar);
   },
 
   ExportProjDialog(state: State) {
@@ -136,7 +136,6 @@ const mutations = {
   },
 
   DisableFirstTimeUse(state: State) {
-    DBManager.getAppDB().setValue("first_time_use", false);
     state.firstTimeUse = false;
   },
 
@@ -144,7 +143,6 @@ const mutations = {
     if (data.defaultFolder == null) {
       throw new Error(`A valid data parameter required :${data}`);
     }
-    DBManager.getAppDB().setValue("default_databases_folder", data.defaultFolder);
   },
 
   AddTag(state: State, tag: any) {
@@ -154,10 +152,11 @@ const mutations = {
     if (state.openedProjectId < 0) {
       throw new Error("A project must be opened to add a tag");
     }
-    const db = DBManager.getDB(state.openedProjectId);
-    const tags = db.getValue("tags", []);
-    tags.push(tag);
-    db.setValue("tags", tags);
+    const project = net.project.getById(state.openedProjectId);
+    if (project) {
+      project.categories.push(tag)
+      net.project.update(project.id, project)
+    }
   },
 
   RemoveTag(state: State, tag: any) {
@@ -167,19 +166,11 @@ const mutations = {
     if (state.openedProjectId < 0) {
       throw new Error("A project must be opened to add a tag");
     }
-    const db = DBManager.getDB(state.openedProjectId);
-    const tags = db.getValue("tags", []);
-    let index = -1;
-    for (let i = 0; i < tags.length; i++)
-      if (tags[i].tag == tag.tag) {
-        index = i;
-        break;
-      }
-    if (index == -1) {
-      throw new Error(`Could not find tag ${tag}`);
+    const project = net.project.getById((state.openedProjectId));
+    if (project) {
+      project.categories = project.categories.filter(x => x === tag);
+      net.project.update(project.id, project)
     }
-    tags.splice(index, 1);
-    db.setValue("tags", tags);
   },
 
   ToggleUpdateProject(state: State) {
@@ -208,18 +199,18 @@ const mutations = {
     state.dialog.opened = false;
   },
 
-  SetCurrentLanguage(state: State, language: string) {
+  SetCurrentLanguage(state: State, language: "en" | "zh") {
     if (language == null || language.length <= 0) {
       throw new Error("Cannot set language with invalid data");
     }
-    DBManager.getAppDB().setValue("lang", language);
+    net.peferences.setValue("lang", language)
     state.selectedLanguage = language;
   }
 };
 
 const getters = {
   isMac() {
-    return DBManager.getAppDB().getValue("isMac", false);
+    return false
   },
 
   isProjectOpened(state: State) {
@@ -252,9 +243,9 @@ const getters = {
 
   projectTags(state: State) {
     if (state.openedProjectId < 0) {
-      throw new Error("A project must be opened to get its tags");
+      throw new Error("A project must be opened to get its categories");
     }
-    return DBManager.getDB(state.openedProjectId).getValue("tags", []);
+    return net.project.getById(state.openedProjectId)?.categories;
   },
 
   currentProject(state: State) {
@@ -270,11 +261,11 @@ const getters = {
   },
 
   defaultPath(state: State) {
-    return DBManager.getAppDB().getValue("default_databases_folder", "");
+    return ""
   },
 
   currentProjectMilestones(state: State) {
-    return () => DBManager.getDB(state.openedProjectId).getAll<Milestone>("milestones");
+    return () => new Milestone(-1, "", Date.now(), "");
   },
 
   currentMilestoneId(state: State) {
