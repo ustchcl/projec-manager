@@ -1,5 +1,5 @@
-import DBManager from "@/core/DBManager";
 import { Milestone } from "@/core/Data";
+import * as net from '@/core/DataLayer'
 
 type State = {
   // Retrieve all the milestones by their ID.
@@ -20,6 +20,13 @@ const getters = {
   }
 };
 
+type CreateMilestoneParams = {
+  projectId: number;
+  title: string;
+  description: string;
+  deadline: number;
+}
+
 const mutations = {
   /**
    * Create a new milestone and store it in the database.
@@ -27,21 +34,22 @@ const mutations = {
    * @param {*State} state State of MilestoneStore
    * @param {*Milestone} data Contains the data about the milestone to create.
    */
-  CreateMilestone(state: State, data: any) {
+  CreateMilestone(state: State, data: CreateMilestoneParams) {
     // Check if the data is valid.
-    if (data.projectId == null || data.name == null) {
+    if (data.projectId == null || data.title == null) {
       throw new Error("A valid data attribute is required");
     }
-
-    const projectDB = DBManager.getDB(data.projectId);
-    // Create the new milestone object
-    const milestone = new Milestone(projectDB.getId("milestones_id"), data.name, 0, "");
-
-    // Store the new milestone object in the database.
-    projectDB.write("milestones", milestone);
-
-    // Update the milestones
-    mutations.UpdateMilestones(state, data);
+    const project = net.project.getById(data.projectId); 
+    if (project) {
+      const milestone = new Milestone(
+        project.selectedMilestoneId,
+        data.title,
+        data.deadline,
+        data.description
+      )
+      project.milestones.push(milestone)
+      mutations.UpdateMilestones(state, data);
+    }
   },
 
   UpdateProjectMilestoneId(state: State, data: any) {
@@ -49,14 +57,6 @@ const mutations = {
     if (data.projectId == null || data.milestoneId == null) {
       throw new Error("Cannot set invalid milestone data to project.");
     }
-
-    const projectDB = DBManager.getDB(data.projectId);
-    const projectInfo = projectDB.getValue("info");
-
-    projectInfo.selectedMilestoneId = data.milestoneId;
-
-    projectDB.setValue("info", projectInfo);
-    DBManager.getAppDB().update("projects", projectInfo.id, projectInfo);
   },
 
   /**
@@ -66,7 +66,6 @@ const mutations = {
     if (data.projectId == null) {
       throw new Error("UpdateMilestones: Project id required.");
     }
-    state.milestones = DBManager.getDB(data.projectId).getAll("milestones");
   }
 };
 

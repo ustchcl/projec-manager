@@ -1,6 +1,7 @@
 export class Project {
   public id = -1;
   public selectedMilestoneId = 0;
+  public milestones: Milestone[] = [];
 
   constructor(
     public readonly title: string,

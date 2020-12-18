@@ -2,7 +2,7 @@
  * DataLayer 提供获取和保存数据的抽象
  */
 
-import { Project, User } from "./Data";
+import { Milestone, Project, User } from "./Data";
 import Peferences from "./Peferences";
 
 function* getId(start: number) {
@@ -80,4 +80,10 @@ export const peferences = {
         this.saveConfig()
     }
 
+}
+
+export const milestone = {
+    create(milestone: Milestone) {
+        localStorage.setItem(`Mil-${milestone.id}`, JSON.stringify(milestone))
+    }
 }
