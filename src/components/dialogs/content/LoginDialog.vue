@@ -40,12 +40,12 @@ export default class LoginDialog extends Vue {
   password = ""
   nameRules = [
     (v: string) => !!v || "Name is required",
-    (v: string) => (v && v.length <= 8) || "Name must be less than 8 characters",
+    (v: string) => (v && v.length <= 18) || "Name must be less than 18 characters",
   ];
 
   passwordRules = [
     (v: string) => !!v || "Name is required",
-    (v: string) => (v && v.length <= 6) || "Password must be less than 6 characters",
+    (v: string) => (v && v.length <= 16) || "Password must be less than 16 characters",
   ]
 
   checkbox = false
