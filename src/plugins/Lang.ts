@@ -46,6 +46,7 @@ export const LangData = {
     close: "Close",
     delete: "Delete",
     add: "Add"
+
   },
   zh: {
     projectName: "ISPOT 项目管理",

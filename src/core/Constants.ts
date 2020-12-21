@@ -7,7 +7,9 @@ export const Dialogs = {
   VisualizeNote: "visualize-note-dialog",
   EditNote: "edit-note-dialog",
   Search: "search-dialog",
-  EditProject: "edit-project-dialog"
+  EditProject: "edit-project-dialog",
+
+  Login: "login-dialog"
 };
 
 export const WHITE_TEXT = "#FFF";

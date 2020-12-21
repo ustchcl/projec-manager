@@ -22,7 +22,6 @@ export default class ContentDialog extends Vue {
   @Getter("isDialogOpened") isDialogOpened!: boolean;
 
   get visible() {
-    console.log("-------- get")
     return this.isDialogOpened
   }
 

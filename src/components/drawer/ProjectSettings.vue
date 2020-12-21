@@ -12,7 +12,7 @@
 </template>
 <script lang="ts">
 import ProjectManager from "@/core/ProjectManager";
-import { mdiPlus, mdiDatabaseExport, mdiDatabaseImport, mdiCog } from "@mdi/js";
+import { mdiPlus, mdiDatabaseExport, mdiDatabaseImport, mdiCog, mdiLogin } from "@mdi/js";
 import { Dialogs } from "../../core/Constants";
 import { Vue, Component } from "vue-property-decorator";
 
@@ -45,6 +45,13 @@ export default class ProjectSettings extends Vue {
       icon: mdiCog,
       action: () => {
         this.$store.dispatch("ToggleDialog", Dialogs.AppSettings);
+      },
+    },
+    {
+      title:  "登录",
+      icon: mdiLogin,
+      action: () => {
+        this.$store.dispatch("ToggleDialog", Dialogs.Login);
       },
     },
   ];
