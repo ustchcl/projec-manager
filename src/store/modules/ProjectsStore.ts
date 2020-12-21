@@ -2,6 +2,7 @@ import DBManager from "@/core/DBManager";
 import EventManager from "@/core/EventManager";
 import { Project, Category } from "@/core/Data";
 import * as net from "@/core/DataLayer"
+import * as req from "@/core/Network"
 
 type State = {
   projects: Project[];
@@ -37,7 +38,7 @@ const mutations = {
    * @param {*State} state ProjectStore state.
    * @param {*Project} data Contains the project's title and description.
    */
-  CreateProject(state: State, data: Project) {
+  async CreateProject(state: State, data: Project) {
     // Make sure the project's data is valid.
     if (
       data.title == null ||
@@ -50,10 +51,15 @@ const mutations = {
 
     // Create the new project to store.
     const project = new Project(data.title, data.description, data.categories);
-    project.customPath =
-      data.customPath || DBManager.getAppDB().getValue("default_databases_folder");
 
-    net.project.create(project);
+    const resp = await req.project.create(project.title, project.description)
+    if (resp.ok) {
+      const id = (await resp.json()).id as number;
+      for (let i = 0; i < project.categories.length; i++) {
+        await req.category.create(project.categories[i].title, id)
+      }
+      // project.categories.map(c => req.category.create(c.title, id))
+    }
   },
 
   UpdateProject(state: State, data: any) {

@@ -1,5 +1,10 @@
 # project-manager
 
+1. 重写所有数据逻辑
+2. 完成服务器联调
+3. 服务器: 用户的默认配置
+4. 登陆逻辑
+
 ## features
 
 ### concept1
