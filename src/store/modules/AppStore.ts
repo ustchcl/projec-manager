@@ -248,8 +248,13 @@ const getters = {
     return [] // net.project.getById(state.openedProjectId)?.categories;
   },
 
-  currentProject(state: State) {
+  currentProjectOld(state: State) {
     return (context: any) => context.$store.getters.getProjectById(state.openedProjectId);
+  },
+
+
+  isShowSearch(state: State) {
+    return false
   },
 
   searchContent(state: State) {

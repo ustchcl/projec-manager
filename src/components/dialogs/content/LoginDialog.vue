@@ -38,6 +38,7 @@ import { account } from "@/core/Network";
 export default class LoginDialog extends Vue {
   username = ""
   password = ""
+  valid = true
   nameRules = [
     (v: string) => !!v || "Name is required",
     (v: string) => (v && v.length <= 18) || "Name must be less than 18 characters",

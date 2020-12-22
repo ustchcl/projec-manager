@@ -1,10 +1,10 @@
 import { account } from "@/core/Network"
 
 
-type User = {id: number, username: string, icon: string}
+type User = {id: number; username: string; icon: string}
 
 type State = {
-  user: User | null,
+  user: User | null;
 }
 
 const state: State = {
@@ -21,7 +21,7 @@ const getters = {
 }
 
 const actions = {
-  async login(context: any, loginParams: {username: string, password: string}) {
+  async login(context: any, loginParams: {username: string; password: string}) {
     const resp = await account.login(loginParams.username, loginParams.password)
     if (resp.ok) {
       context.commit('setUser', await resp.json())

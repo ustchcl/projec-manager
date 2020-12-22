@@ -11,7 +11,6 @@
   </v-list>
 </template>
 <script lang="ts">
-import ProjectManager from "@/core/ProjectManager";
 import { mdiPlus, mdiDatabaseExport, mdiDatabaseImport, mdiCog, mdiLogin } from "@mdi/js";
 import { Dialogs } from "../../core/Constants";
 import { Vue, Component } from "vue-property-decorator";

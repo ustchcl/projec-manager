@@ -2,7 +2,7 @@ import * as qs from "qs";
 const BASE_URL = "http://49.234.74.97/server"
 
 
-function post(uri: string, params: any = {}, withCredentials = true) {
+function post(uri: string, params: any = {}) {
   return fetch(`${BASE_URL + uri}`, {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded"},
@@ -12,12 +12,21 @@ function post(uri: string, params: any = {}, withCredentials = true) {
   })
 }
 
-
-function get(uri: string, params: any = {}) {
+function delete_(uri: string, params: any = {}) {
   return fetch(`${BASE_URL + uri}`, {
-    method: "GET",
+    method: "DELETE",
     headers: { "Content-Type": "application/x-www-form-urlencoded"},
     body: qs.stringify(params),
+    credentials: "include",
+    mode: "cors"
+  })
+}
+
+
+function get(uri: string, params: any = {}) {
+  return fetch(`${BASE_URL + uri}?${qs.stringify(params)}`, {
+    method: "GET",
+    headers: { "Content-Type": "application/x-www-form-urlencoded"},
     credentials: "include",
     mode: 'cors'
   })
@@ -26,7 +35,7 @@ function get(uri: string, params: any = {}) {
 
 export const account = {
   login(username: string, password: string) {
-    return post("/account/login", { username, password }, false)
+    return post("/account/login", { username, password })
   },
 
   register(username: string, password: string) {
@@ -41,6 +50,9 @@ export const project = {
 
   create(title: string, description: string) {
     return post("/project", {title, description})
+  },
+  delete_(id: number) {
+    return delete_(`/project/${id}`)
   }
 }
 

@@ -18,7 +18,7 @@ const getters = {
     return (id: number | string) => state.projects.filter(project => project.id === id)[0];
   },
 
-  projects(state: State) {
+  projectsOld(state: State) {
     return state.projects;
   }
 };
