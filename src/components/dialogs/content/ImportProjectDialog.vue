@@ -17,7 +17,7 @@
 <script lang="ts">
 import {Vue, Component, Prop} from "vue-property-decorator";
 import { Getter } from "vuex-class";
-import * as net from "@/core/DataLayer"
+import * as net from "@/core/Network"
 
 
 @Component
@@ -33,7 +33,8 @@ export default class ImportProjectDialog extends Vue {
   }
 
   importProject() {
-    net.project.create(JSON.parse(this.projectJson))
+    const json = JSON.parse(this.projectJson);
+    net.project.create(json.title, json.description)
   }
 
   onChange(file: File) {

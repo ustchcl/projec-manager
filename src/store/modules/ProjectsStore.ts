@@ -28,8 +28,11 @@ const mutations = {
    * Retrieve all the projects from the database.
    * @param {*State} state ProjectStore state.
    */
-  RetrieveProjects(state: State) {
-    state.projects = net.project.list().filter(x => x !== null) as Project[]
+  async RetrieveProjects(state: State) {
+    const resp = await req.project.list();
+    if (resp.ok) {
+      state.projects = await resp.json()
+    }
   },
 
   /**
@@ -74,7 +77,7 @@ const mutations = {
       throw new Error(`Cannot update a project with invalid data ${Object.values(data)}`);
     }
 
-    net.project.update(data.id, data)
+    // req.project.update(data.id, data)
   },
 
   /**
@@ -89,7 +92,7 @@ const mutations = {
       throw new Error("Project ID required to delete a project.");
     }
 
-    net.project.remove(project.id)
+    // net.project.remove(project.id)
   },
 
   ToggleFoldCategory(state: State, data: any) {
@@ -135,8 +138,11 @@ const mutations = {
   /**
    * Update the content of the projets.
    */
-  UpdateProjects(state: State) {
-    state.projects = net.project.list().filter(x => x !== null) as Project[]
+  async UpdateProjects(state: State) {
+    const resp = await req.project.list();
+    if (resp.ok) {
+      state.projects = await resp.json()
+    }
   }
 };
 

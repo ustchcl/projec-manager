@@ -39,17 +39,17 @@ const mutations = {
     if (data.projectId == null || data.title == null) {
       throw new Error("A valid data attribute is required");
     }
-    const project = net.project.getById(data.projectId); 
-    if (project) {
-      const milestone = new Milestone(
-        project.selectedMilestoneId,
-        data.title,
-        data.deadline,
-        data.description
-      )
-      project.milestones.push(milestone)
-      mutations.UpdateMilestones(state, data);
-    }
+    // const project = net.project.getById(data.projectId); 
+    // if (project) {
+    //   const milestone = new Milestone(
+    //     project.selectedMilestoneId,
+    //     data.title,
+    //     data.deadline,
+    //     data.description
+    //   )
+    //   project.milestones.push(milestone)
+    //   mutations.UpdateMilestones(state, data);
+    // }
   },
 
   UpdateProjectMilestoneId(state: State, data: any) {

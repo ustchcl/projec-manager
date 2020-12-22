@@ -88,8 +88,6 @@ class Input {
     this.categories.push(this.category)
     this.category = ""
   }
-
-  
 }
 
 @Component({

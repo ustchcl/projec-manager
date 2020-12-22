@@ -90,14 +90,14 @@ const mutations = {
   OpenProject(state: State, id: string | number) {
     state.openedProjectId = id;
     // Set the default milestone when opening a project.
-    if (id >= 0) {
-      const info = net.project.getById(id); // DBManager.getDB(id).getValue("info");
-      state.projectName = info?.title ?? "";
+    // if (id >= 0) {
+    //   const info = net.project.getById(id); // DBManager.getDB(id).getValue("info");
+    //   state.projectName = info?.title ?? "";
 
-      // state.currentMilestoneId = info.selectedMilestoneId;
-    } else {
-      state.projectName = "";
-    }
+    //   // state.currentMilestoneId = info.selectedMilestoneId;
+    // } else {
+    //   state.projectName = "";
+    // }
 
     // Clear the search content, searches are different from project to notes.
     state.searchContent = "";
@@ -152,11 +152,11 @@ const mutations = {
     if (state.openedProjectId < 0) {
       throw new Error("A project must be opened to add a tag");
     }
-    const project = net.project.getById(state.openedProjectId);
-    if (project) {
-      project.categories.push(tag)
-      net.project.update(project.id, project)
-    }
+    // const project = net.project.getById(state.openedProjectId);
+    // if (project) {
+    //   project.categories.push(tag)
+    //   net.project.update(project.id, project)
+    // }
   },
 
   RemoveTag(state: State, tag: any) {
@@ -166,11 +166,11 @@ const mutations = {
     if (state.openedProjectId < 0) {
       throw new Error("A project must be opened to add a tag");
     }
-    const project = net.project.getById((state.openedProjectId));
-    if (project) {
-      project.categories = project.categories.filter(x => x === tag);
-      net.project.update(project.id, project)
-    }
+    // const project = net.project.getById((state.openedProjectId));
+    // if (project) {
+    //   project.categories = project.categories.filter(x => x === tag);
+    //   net.project.update(project.id, project)
+    // }
   },
 
   ToggleUpdateProject(state: State) {
@@ -245,7 +245,7 @@ const getters = {
     if (state.openedProjectId < 0) {
       throw new Error("A project must be opened to get its categories");
     }
-    return net.project.getById(state.openedProjectId)?.categories;
+    return [] // net.project.getById(state.openedProjectId)?.categories;
   },
 
   currentProject(state: State) {
