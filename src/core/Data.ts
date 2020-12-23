@@ -1,55 +1,49 @@
-export class Project {
-  public id = -1;
-  public selectedMilestoneId = 0;
-  public milestones: Milestone[] = [];
-
-  constructor(
-    public readonly title: string,
-    public readonly description: string,
-    public categories: Category[],
-    public customPath: string = "",
-  ) { }
+export type Project = {
+  id: number;
+  title: string;
+  description: string;
 }
 
-export class Category {
-  constructor(public tag: string, public title: string, public folded: boolean) { }
+export type ProjectDetail = {
+  project: Project;
+  categories: Category[];
+  tags: Tag[];
+  milestones: Milestone[];
+  tasks: Task[];
 }
 
-export class Task {
-  constructor(public readonly id: string, public content: string, public done: boolean) { }
+export type Category = {
+  id: number;
+  content: string;
+  project_id: number;
 }
 
-export class Note {
-  public id = -1;
-  public order = 0;
-  public tasks: Task[] = [];
-
-  constructor(
-    public readonly projectId: number,
-    public readonly title: string,
-    public readonly description: string,
-    public category: string,
-    public readonly color: string,
-    public readonly textColor: string,
-    public readonly milestoneId: number,
-    public readonly tags: string[] = []
-  ) { }
+export type Tag = {
+  id: number;
+  content: string;
+  project_id: number;
 }
 
-export class Milestone {
-  constructor(
-    public readonly id: number, 
-    public readonly title: string, 
-    public deadline: number,
-    public description: string
-  ) { }
+export type Milestone = {
+  id: number;
+  title: string;
+  description: string;
+  deadline: number;
+  project_id: number;
 }
 
+export type Account = {
+  id: number;
+  username: string;
+  icon: string;
+  password: string;
+}
 
-export class User {
-  constructor(
-    public id: number,
-    public username: string,
-    public icon: string
-  ) {}
+export type Task = {
+  id: number;
+  title: string;
+  description: string;
+  milestone_id: number;
+  creator_id: number;
+  project_id: number;
 }

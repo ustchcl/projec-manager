@@ -29,7 +29,7 @@
               class="create-project__category"
               :color="appColor"
               label="Categories"
-              placeholder="Input a new category and enter"
+              placeholder="输入标签, 回车创建"
               append-icon="mdi-backburger"
               outlined
               dense
@@ -127,7 +127,7 @@ export default class CreateProjectDialog extends Vue {
             ["clean"] // remove formatting button
           ]
         },
-        placeholder: "Description of your project...",
+        placeholder: "请输入项目的描述信息...",
         theme: "snow" // or 'bubble'
       };
       this.editor = new Quill("#editor", options);

@@ -64,6 +64,10 @@ const actions = {
   // async updateProject(context: any, data: any) {
 
   // }
+
+  OpenProject(context: any, project: any) {
+
+  }
 }
 
 const mutations = {

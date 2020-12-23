@@ -1,10 +1,8 @@
 import { account } from "@/core/Network"
-
-
-type User = {id: number; username: string; icon: string}
+import { Account } from "@/core/Data"
 
 type State = {
-  user: User | null;
+  user: Account | null;
 }
 
 const state: State = {
@@ -26,11 +24,17 @@ const actions = {
     if (resp.ok) {
       context.commit('setUser', await resp.json())
     }
-  }
+  },
+  async register(context: any, regParmas: {username: string; password: string}) {
+    const resp = await account.register(regParmas.username, regParmas.password)
+    if (resp.ok) {
+      await context.dispatch("login", regParmas)
+    }
+  },
 }
 
 const mutations = {
-  setUser(state: State, user: User) {
+  setUser(state: State, user: Account) {
     state.user = user
   }
 }

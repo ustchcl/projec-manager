@@ -14,9 +14,12 @@
 import { mdiPlus, mdiDatabaseExport, mdiDatabaseImport, mdiCog, mdiLogin } from "@mdi/js";
 import { Dialogs } from "../../core/Constants";
 import { Vue, Component } from "vue-property-decorator";
+import { Getter } from "vuex-class";
 
 @Component
 export default class ProjectSettings extends Vue {
+  @Getter("isLogin") isLogin!: boolean;
+  @Getter("currentuser") user!: any;
   items = [
     {
       title: (this as any).$lang.Get("newProject"),
@@ -47,7 +50,7 @@ export default class ProjectSettings extends Vue {
       },
     },
     {
-      title:  "登录",
+      title: this.isLogin ? this.user?.username : "登录",
       icon: mdiLogin,
       action: () => {
         this.$store.dispatch("ToggleDialog", Dialogs.Login);

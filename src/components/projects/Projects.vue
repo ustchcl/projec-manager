@@ -7,34 +7,32 @@
     </v-layout>
   </div>
 </template>
-<script>
-import Project from "./Project";
+<script lang="ts">
+import Project from "./Project.vue";
 import AppManager from "@/core/ApplicationManager";
+import { Vue, Component, Prop } from "vue-property-decorator";
+import { Getter } from "vuex-class";
 
-export default {
-  name: "Projects",
+@Component({
   components: {
-    Project
+    Project,
   },
-  computed: {
-    projects() {
-      return this.$store.state.ProjectsStore.projects;
-    },
-    color() {
-      if (this.$store.getters.isDarkMode) return "";
-      return "grey lighten-2";
-    },
+  name: "projects",
+})
+export default class extends Vue {
+  @Getter("projects") projects!: any[];
+  @Getter("isDarkMode") isDarkMode!: boolean;
+  @Getter("createProject") createProjectDialog!: string;
 
-    createProjectDialog() {
-      return this.$store.state.AppStore.dialogs.createProject;
-    }
-  },
-  mounted() {
-    // Update the projects list.
-    this.$store.dispatch("RetrieveProjects");
+  get color() {
+    if (this.isDarkMode) return "";
+    return "grey lighten-2";
+  }
+
+   mounted() {
     AppManager.setupProjectsPage("container");
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

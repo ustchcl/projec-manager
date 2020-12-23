@@ -31,7 +31,7 @@ import Projects from "./projects/Projects.vue";
 import FirstUse from "./Temp/FirstUse.vue";
 import SearchBar from "./SearchBar.vue";
 import ContentDialogVue from "./dialogs/ContentDialog.vue";
-import { Vue, Component } from "vue-property-decorator"
+import { Vue, Component, Watch } from "vue-property-decorator"
 import { Getter } from 'vuex-class';
 import { Dialogs } from '@/core/Constants';
 
@@ -57,6 +57,14 @@ export default class LandingPage extends Vue {
   @Getter("isShowHelper") showHelper!: boolean;
   @Getter("isLogin") isLogin!: boolean;
 
+  @Watch('isLogin')
+  onLoginChange(val: boolean, oldVal: string) {
+    console.log(val, oldVal, '-------------')
+    if (!oldVal && val) {
+      this.$store.dispatch("getProjects")
+    }
+  }
+
   get currentDialog() {
     return "dialog-create-project";
   }
@@ -68,6 +76,7 @@ export default class LandingPage extends Vue {
       "content"
     );
     InputManager.initialize(this);
+    this.init()
   }
 
   async init() {

@@ -2,7 +2,7 @@
   <v-card
     class="ma-2 pa-3 project_card elevation-3"
     height="90%"
-    @click.native="openProject"
+    @click="openProject"
   >
     <v-card-title>
       {{ project.title }}

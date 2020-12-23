@@ -269,10 +269,6 @@ const getters = {
     return ""
   },
 
-  currentProjectMilestones(state: State) {
-    return () => new Milestone(-1, "", Date.now(), "");
-  },
-
   currentMilestoneId(state: State) {
     return state.currentMilestoneId;
   },

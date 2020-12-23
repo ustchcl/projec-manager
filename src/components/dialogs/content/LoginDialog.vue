@@ -52,17 +52,13 @@ export default class LoginDialog extends Vue {
   checkbox = false
 
   async register() {
-    const resp = await account.register(this.username, this.password);
-    if (resp.ok) {
-      console.log(await resp.json())
-    }
+    await this.$store.dispatch("register", {username: this.username, password: this.password})
+    this.$store.dispatch("CloseDialog");
   }
 
   async login() {
-    const resp = await account.login(this.username, this.password);
-    if (resp.ok) {
-      console.log(await resp.json())
-    }
+    await this.$store.dispatch("login", {username: this.username, password: this.password})
+    this.$store.dispatch("CloseDialog");
   }
 }
 </script>
